@@ -28,8 +28,8 @@ cc.Class({
 
         for (let i = 0; i < 9; i++) {
             let node = cc.instantiate(self.itemPrefeb);
-            node.parent = this.node;
-            this.items.push(node.getComponent('item'));
+            node.parent = self.node;
+            self.items.push(node.getComponent('item'));
         }
 
         // 加载 Texture
@@ -77,7 +77,7 @@ cc.Class({
         let self = this;
 
         for (let i = 0; i < self.items.length; i++) {
-            let randomSeed = Math.floor(Math.random() * self.items.length);
+            let randomSeed = Math.floor(Math.random() * (self.items.length + 1));
             let item = self.items[i];
             let rItem = self.items[randomSeed];
             let x = item.cfg.posX;
