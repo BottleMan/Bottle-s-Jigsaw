@@ -77,7 +77,7 @@ cc.Class({
         let self = this;
 
         for (let i = 0; i < self.items.length; i++) {
-            let randomSeed = Math.floor(Math.random() * (self.items.length + 1));
+            let randomSeed = Math.floor(Math.random() * (self.items.length));
             let item = self.items[i];
             let rItem = self.items[randomSeed];
             let x = item.cfg.posX;
