@@ -290,8 +290,6 @@
     "curTexture": null,
     "picHeight": 540,
     "picWidth": 810,
-    "audioDrop": null,
-    "audioPick": null,
     "_id": "97zAGDbzdErYB5sZHYn13k"
   },
   {
@@ -361,7 +359,7 @@
     },
     "_enabled": true,
     "_clip": {
-      "__uuid__": "0e20522b-cae4-421c-9815-6b02fc15e738"
+      "__uuid__": "dd19b674-3d27-4c86-9971-dabf48219ef0"
     },
     "_volume": 0.8,
     "_mute": false,
