@@ -74,7 +74,7 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
             self.moveStartCb = self.moveStartCb || function () {
             };
-            self.moveStartCb();
+            self.moveStartCb(self.node);
         }, this.node);
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {

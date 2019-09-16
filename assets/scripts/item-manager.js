@@ -17,6 +17,7 @@ cc.Class({
         curTexture: null,
         picHeight: 540,
         picWidth: 810,
+        maxIndex: 0
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -88,8 +89,13 @@ cc.Class({
         }
     },
 
-    __moveStart() {
+    __moveStart(node) {
         console.info('start');
+
+        let itemManager = node.parent.getComponent('item-manager');
+        itemManager.maxIndex++;
+        node.zIndex = itemManager.maxIndex;
+
         cc.loader.loadRes('sound/pick', cc.AudioClip, function (err, clip) {
             cc.audioEngine.playEffect(clip, false);
         });
