@@ -66,7 +66,7 @@ cc.Class({
                     posX: posX,
                     posY: posY,
                     index: itemIndex
-                });
+                }, self.__moveStart, self.__moveEnd);
 
                 itemIndex++;
             }
@@ -86,5 +86,19 @@ cc.Class({
             item.setItemPosition(rItem.cfg.posX, rItem.cfg.posY);
             rItem.setItemPosition(x, y);
         }
+    },
+
+    __moveStart() {
+        console.info('start');
+        cc.loader.loadRes('sound/pick', cc.AudioClip, function (err, clip) {
+            cc.audioEngine.playEffect(clip, false);
+        });
+    },
+
+    __moveEnd() {
+        console.info('end');
+        cc.loader.loadRes('sound/drop', cc.AudioClip, function (err, clip) {
+            cc.audioEngine.playEffect(clip, false);
+        });
     }
 });

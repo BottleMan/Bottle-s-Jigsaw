@@ -91,7 +91,7 @@
 			],
 			"build_platform": [],
 			"require_verify": 1,
-			"service_price": "The service according to usage billing，<a href='https://docs.agora.io/en/Agora Platform/billing_faq?platform=All Platforms'> <font color='#DDDDDD'> billing rules </font> </a>，the fees incurred by the third party from your <a href='https://account.cocos.com/#/finance/finance_list'> <font color='#DDDDDD'> Cocos balances </font></a>.",
+			"service_price": "The service according to usage billing，<a href='https://www.agora.io/en/price/'> <font color='#DDDDDD'> billing rules </font> </a>，the fees incurred by the third party from your <a href='https://account.cocos.com/#/finance/finance_list'> <font color='#DDDDDD'> Cocos balances </font></a>.",
 			"service_protocol": "Game for the first time to open the service，service party may according to need to get your Cocos account information，click on the confirm open button that is seen as you agree to the service to access your account information，See <a href='http://auth.cocos.com/CocosServiceAgreement.html'>Cocos user service agreement </a> and <a href='http://auth.cocos.com/PrivacyPolicy.html'>Cocos privacy policy</a>"
 		}
 	],

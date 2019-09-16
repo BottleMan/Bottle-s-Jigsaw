@@ -15,6 +15,8 @@ cc.Class({
         picSprite: cc.Sprite,
         frame: cc.Node,
         cfg: null,
+        moveStartCb: null,
+        moveEndCb: null
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -27,8 +29,10 @@ cc.Class({
 
     // update (dt) {},
 
-    initPic(cfg) {
+    initPic(cfg, moveStartCb, moveEndCb) {
         this.cfg = cfg;
+        this.moveStartCb = moveStartCb;
+        this.moveEndCb = moveEndCb;
 
         this.__initNode();
         this.__initSprite();
@@ -66,6 +70,13 @@ cc.Class({
     },
 
     __initTouch() {
+        let self = this;
+        this.node.on(cc.Node.EventType.TOUCH_START, function (event) {
+            self.moveStartCb = self.moveStartCb || function () {
+            };
+            self.moveStartCb();
+        }, this.node);
+
         this.node.on(cc.Node.EventType.TOUCH_MOVE, function (event) {
             this.opacity = 100;
             let delta = event.touch.getDelta();
@@ -75,6 +86,10 @@ cc.Class({
 
         this.node.on(cc.Node.EventType.TOUCH_END, function () {
             this.opacity = 255;
+
+            self.moveEndCb = self.moveEndCb || function () {
+            };
+            self.moveEndCb();
         }, this.node);
     },
 
