@@ -89,7 +89,7 @@ cc.Class({
 
             self.moveEndCb = self.moveEndCb || function () {
             };
-            self.moveEndCb();
+            self.moveEndCb(self.node);
         }, this.node);
     },
 

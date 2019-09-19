@@ -13,11 +13,6 @@ cc.Class({
 
     properties: {
         itemPrefeb: cc.Prefab,
-        items: [cc.Component], // 声明数组变量
-        curTexture: null,
-        picHeight: 540,
-        picWidth: 810,
-        maxIndex: 0
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -26,6 +21,9 @@ cc.Class({
 
     start() {
         let self = this;
+
+        // 初始化变量
+        self.__initParams();
 
         for (let i = 0; i < 9; i++) {
             let node = cc.instantiate(self.itemPrefeb);
@@ -42,6 +40,14 @@ cc.Class({
     },
 
     // update (dt) {},
+
+    __initParams() {
+        this.items = [];
+        this.curTexture = null;
+        this.picHeight = 540;
+        this.picWidth = 810;
+        this.maxIndex = 0;
+    },
 
     __initItems() {
         let self = this;
@@ -101,10 +107,46 @@ cc.Class({
         });
     },
 
-    __moveEnd() {
+    __moveEnd(node) {
         console.info('end');
+
+        let picHeight = node.height;
+        let picWidth = node.width;
+        let nodeVec = cc.v2({x: node.position.x, y: node.position.y});
+        let itemManager = node.parent.getComponent('item-manager');
+        let conditions = [
+            {x: picWidth, y: 0},
+            {x: (-1) * picWidth, y: 0},
+            {x: 0, y: picHeight},
+            {x: 0, y: (-1) * picHeight},
+        ];
+
+        for (let i = 0; i < itemManager.items.length; i++) {
+            let itemNode = itemManager.items[i].node;
+            let itemPos = itemNode.position;
+            let isMoved = false;
+
+            for (let j = 0; j < conditions.length; j++) {
+                let con = conditions[j];
+                let targetVec = cc.v2({
+                    x: itemPos.x + con.x,
+                    y: itemPos.y + con.y
+                });
+                let distance = targetVec.sub(nodeVec).mag();
+                if (distance > 100) continue;
+
+                isMoved = true;
+
+                let action = cc.moveTo(0.1, targetVec);
+                node.runAction(action);
+            }
+
+            if (!isMoved) continue;
+            break;
+        }
+
         cc.loader.loadRes('sound/drop', cc.AudioClip, function (err, clip) {
             cc.audioEngine.playEffect(clip, false);
         });
-    }
+    },
 });
