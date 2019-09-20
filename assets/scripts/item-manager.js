@@ -110,10 +110,18 @@ cc.Class({
     __moveEnd(node) {
         console.info('end');
 
+        cc.loader.loadRes('sound/drop', cc.AudioClip, function (err, clip) {
+            cc.audioEngine.playEffect(clip, false);
+        });
+
+        let self = node.parent.getComponent('item-manager');
+        self.adsorption(node);
+    },
+
+    adsorption(node) {
         let picHeight = node.height;
         let picWidth = node.width;
         let nodeVec = cc.v2({x: node.position.x, y: node.position.y});
-        let itemManager = node.parent.getComponent('item-manager');
         let conditions = [
             {x: picWidth, y: 0},
             {x: (-1) * picWidth, y: 0},
@@ -121,8 +129,8 @@ cc.Class({
             {x: 0, y: (-1) * picHeight},
         ];
 
-        for (let i = 0; i < itemManager.items.length; i++) {
-            let itemNode = itemManager.items[i].node;
+        for (let i = 0; i < this.items.length; i++) {
+            let itemNode = this.items[i].node;
             let itemPos = itemNode.position;
             let isMoved = false;
 
@@ -137,16 +145,41 @@ cc.Class({
 
                 isMoved = true;
 
+                let finished = cc.callFunc(this.checkWin, this);
                 let action = cc.moveTo(0.1, targetVec);
-                node.runAction(action);
+                let seq = cc.sequence(action, finished);
+                node.runAction(seq);
             }
 
             if (!isMoved) continue;
+            console.info('自动吸附条件成立！！！！');
             break;
         }
-
-        cc.loader.loadRes('sound/drop', cc.AudioClip, function (err, clip) {
-            cc.audioEngine.playEffect(clip, false);
-        });
     },
+
+    checkWin() {
+        let conditions = [
+            {x: 270, y: 0}, // 2-1
+            {x: 270, y: 0}, // 3-2
+            {x: 270 * (-2), y: -180}, // 4-3
+            {x: 270, y: 0}, // 5-4
+            {x: 270, y: 0}, // 6-5
+            {x: 270 * (-2), y: -180}, // 7-6
+            {x: 270, y: 0}, // 8-7
+            {x: 270, y: 0}, // 9-8
+        ];
+
+        let j = 0;
+        for (let i = 0; i < this.items.length - 1; i++) {
+            let thisPos = this.items[i].node.position;
+            let nextPos = this.items[i + 1].node.position;
+            if (Math.abs(nextPos.x - thisPos.x - conditions[j].x) > 5) return;
+            if (Math.abs(nextPos.y - thisPos.y - conditions[j].y) > 5) return;
+
+            j++;
+        }
+
+        alert('YOU WIN!!!');
+    }
+
 });
