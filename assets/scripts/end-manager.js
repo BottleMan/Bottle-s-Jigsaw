@@ -12,8 +12,10 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        timerLabel: cc.Label,
-        endManager: cc.Node
+        bgNode: cc.Node,
+        maskNode: cc.Node,
+        winNode: cc.Node,
+        loseNode: cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,32 +23,29 @@ cc.Class({
     // onLoad () {},
 
     start() {
-        this.__startTimer();
+        this.maskNode.on('touchstart', function (event) {
+            event.stopPropagation();
+        });
+
+        this.maskNode.on('touchend', function (event) {
+            event.stopPropagation();
+        });
     },
 
     // update (dt) {},
 
-    stopTimer() {
-        this.unschedule(this.__timerCallback);
+    showWin() {
+        this.node.active = true;
+        this.bgNode.active = true;
+        this.winNode.active = true;
+        this.loseNode.active = false;
     },
 
-    __startTimer() {
-        this.count = 60;
-        this.schedule(this.__timerCallback, 1);
+    showLose() {
+        this.node.active = true;
+        this.bgNode.active = true;
+        this.winNode.active = false;
+        this.loseNode.active = true;
     },
 
-    __timerCallback() {
-        if (this.count <= 0) {
-            this.unschedule(this.callback);
-            this.endManager.getComponent('end-manager').showLose();
-            return;
-        }
-
-        this.count--;
-        this.timerLabel.string = "00:" + this.__prefixZero(this.count, 2);
-    },
-
-    __prefixZero(num, length) {
-        return (Array(length).join('0') + num).slice(-length);
-    }
 });

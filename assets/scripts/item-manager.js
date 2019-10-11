@@ -13,6 +13,8 @@ cc.Class({
 
     properties: {
         itemPrefeb: cc.Prefab,
+        endManager: cc.Node,
+        timer: cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -179,7 +181,8 @@ cc.Class({
             j++;
         }
 
-        alert('YOU WIN!!!');
+        this.endManager.getComponent('end-manager').showWin();
+        this.timer.getComponent('timer').stopTimer();
     }
 
 });
