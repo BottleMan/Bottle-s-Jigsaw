@@ -101,6 +101,7 @@ cc.Class({
         console.info('start');
 
         let itemManager = node.parent.getComponent('item-manager');
+        itemManager.itemStartPos = cc.v2({x: node.position.x, y: node.position.y});
         itemManager.maxIndex++;
         node.zIndex = itemManager.maxIndex;
 
@@ -117,10 +118,10 @@ cc.Class({
         });
 
         let self = node.parent.getComponent('item-manager');
-        self.adsorption(node);
+        self.__adsorption(node);
     },
 
-    adsorption(node) {
+    __adsorption(node) {
         let picHeight = node.height;
         let picWidth = node.width;
         let nodeVec = cc.v2({x: node.position.x, y: node.position.y});
@@ -147,10 +148,20 @@ cc.Class({
 
                 isMoved = true;
 
-                let finished = cc.callFunc(this.checkWin, this);
-                let action = cc.moveTo(0.1, targetVec);
-                let seq = cc.sequence(action, finished);
-                node.runAction(seq);
+                // 目标位置上已经有其他节点
+                if (this.__isPosHasItem(node, targetVec)) {
+                    let action = cc.moveTo(0.1, this.itemStartPos);
+                    node.runAction(action);
+                }
+                // 目标位置上没有其他节点
+                else {
+                    let finished = cc.callFunc(this.__checkWin, this);
+                    let action = cc.moveTo(0.1, targetVec);
+                    let seq = cc.sequence(action, finished);
+                    node.runAction(seq);
+                }
+
+                break;
             }
 
             if (!isMoved) continue;
@@ -159,7 +170,7 @@ cc.Class({
         }
     },
 
-    checkWin() {
+    __checkWin() {
         let conditions = [
             {x: 270, y: 0}, // 2-1
             {x: 270, y: 0}, // 3-2
@@ -183,6 +194,19 @@ cc.Class({
 
         this.endManager.getComponent('end-manager').showWin();
         this.timer.getComponent('timer').stopTimer();
+    },
+
+    __isPosHasItem(node, targetVec) {
+        for (let i = 0; i < this.items.length; i++) {
+            let item = this.items[i];
+            if (item.node._id == node._id) continue;
+            if (Math.abs(item.node.position.x - targetVec.x) > 1) continue;
+            if (Math.abs(item.node.position.y - targetVec.y) > 1) continue;
+
+            return true;
+        }
+
+        return false;
     }
 
 });
