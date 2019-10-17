@@ -22,9 +22,18 @@ cc.Class({
 
     start() {
         this.__startTimer();
+        this.isPause = false;
     },
 
     // update (dt) {},
+
+    pauseTimer() {
+        this.isPause = true;
+    },
+
+    resumeTimer() {
+        this.isPause = false;
+    },
 
     stopTimer() {
         this.unschedule(this.__timerCallback);
@@ -36,6 +45,10 @@ cc.Class({
     },
 
     __timerCallback() {
+        if (this.isPause) {
+            return;
+        }
+
         if (this.count <= 0) {
             this.unschedule(this.callback);
             this.endManager.getComponent('end-manager').showLose();
